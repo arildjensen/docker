@@ -14,11 +14,7 @@ ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN curl -L -o /tmp/funambol.tar.gz http://downloads.sourceforge.net/project/funambol/bundle/v10/funambol-10.0.3-x64.tgz
 RUN tar zxf    /tmp/funambol.tar.gz -C /opt
 RUN rm         /tmp/funambol.tar.gz
+RUN mv         /opt/Funambol /opt/funambol
 
 CMD ["/usr/bin/supervisord"]
 EXPOSE 22 8080
-
-################################################################################
-# To run, execute:
-# docker run --name funambol_i1 -p 0.0.0.0:8080:8080 -d -t -i funambol /bin/bash
-################################################################################
