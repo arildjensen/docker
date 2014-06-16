@@ -5,9 +5,9 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
 RUN apt-get -y upgrade
 
-RUN echo "mysql-server mysql-server/root_password password       root" | debconf-set-selections
-RUN echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections
-RUN apt-get install -y drupal7 openssh-server mysql-server
+#RUN echo "mysql-server mysql-server/root_password password       root" | debconf-set-selections
+#RUN echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections
+RUN apt-get install -y openssh-server mysql-server supervisor
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN mkdir -p /var/run/sshd
