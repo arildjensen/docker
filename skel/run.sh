@@ -16,7 +16,7 @@ docker run -p 80:80 \
            -d \
            -v ${key_dir}:/root/.ssh:ro \
            -h ${image_name} \
-           -b ${image_name} \
+           --name=${image_name} \
            ${image_name}
 
-docker inspect ${iname} | grep IPAddress | awk -F\" '{print $4}'
+docker inspect ${image_name} | grep IPAddress | awk -F\" '{print $4}'
