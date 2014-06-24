@@ -1,14 +1,22 @@
-#!/bin/bash
+#!/bin/sh
 
-iname=rundeck_1
+image_name=$(pwd | xargs basename)
+key_dir=/var/docker/${image_name}
 
-docker run \
-  --name ${iname} \
-  -p 0.0.0.0:4440:4440 \
-  -v /root/.ssh:/root/.ssh:ro \
-  -d \
-  -t \
-  -i \
-  rundeck 
+if [ ! -d ${key_dir} ]; then
+  mkdir -p  ${key_dir}
+  chmod 700 ${key_dir}
+  cp /root/.ssh/authorized_keys ${key_dir}
+  chmod 600 ${key_dir}/*
+fi 
 
-docker inspect ${iname} | grep IPAddress | awk -F\" '{print $4}'
+docker run -p 80:80 \
+           -i \
+           -t \
+           -d \
+           -v ${key_dir}:/root/.ssh:ro \
+           -h ${image_name} \
+           --name=${image_name} \
+           ${image_name}
+
+docker inspect ${image_name} | grep IPAddress | awk -F\" '{print $4}'
