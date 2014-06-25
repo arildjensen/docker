@@ -20,10 +20,6 @@ ADD rundeck-nginx.conf /etc/nginx/sites-available/rundeck.conf
 RUN ln -s /etc/nginx/sites-available/rundeck.conf /etc/nginx/sites-enabled/
 
 RUN curl -L -o /opt/rundeck/rundeck-launcher-2.1.2.jar http://download.rundeck.org/jar/rundeck-launcher-2.1.2.jar
-ADD rundeck-start.sh /opt/rundeck/start.sh
-ADD rundeck-setup.sh /opt/rundeck/setup.sh
-RUN chmod 755        /opt/rundeck/start.sh
-RUN chmod 755        /opt/rundeck/setup.sh
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
