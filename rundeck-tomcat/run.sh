@@ -10,7 +10,7 @@ if [ ! -d ${key_dir} ]; then
   chmod 600 ${key_dir}/*
 fi 
 
-docker run -p 80:80 \
+docker run -p 8080:8080 \
            -i \
            -t \
            -d \
