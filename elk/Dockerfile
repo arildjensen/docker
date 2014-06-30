@@ -14,13 +14,14 @@ RUN mkdir -p /var/log/supervisor
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-RUN curl -L -O https://download.elasticsearch.org/logstash/logstash/logstash-1.4.1.tar.gz
-RUN curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.2.1.tar.gz
-RUN tar zxf logstash-1.4.1.tar.gz      -C /opt
-RUN tar zxf elasticsearch-1.2.1.tar.gz -C /opt
-RUN rm      logstash-1.4.1.tar.gz
-RUN rm      elasticsearch-1.2.1.tar.gz
-ADD logstash.conf /opt/logstash-1.4.1/logstash.conf
+RUN curl -L -O https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash_1.4.2-1-2c0f5a1_all.deb
+RUN curl -L -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.2.1.deb
+RUN dpkg -i logstash_1.4.2-1-2c0f5a1_all.deb
+RUN dpkg -i elasticsearch-1.2.1.deb
+RUN rm      logstash_1.4.2-1-2c0f5a1_all.deb
+RUN rm      elasticsearch-1.2.1.deb
+
+#ADD logstash.conf /etc/logstash/conf.d/logstash.conf
 
 CMD ["/usr/bin/supervisord"]
-EXPOSE 22 514/tcp 514/udp 9292
+EXPOSE 22 514/tcp 514/udp 9200 9292 9300
