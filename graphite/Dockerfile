@@ -20,6 +20,8 @@ RUN echo "SECRET_KEY = '`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | he
 RUN echo "DATABASES = { 'default': { 'NAME': '/var/lib/graphite/graphite.db', 'ENGINE': 'django.db.backends.sqlite3', 'USER': 'admin', 'PASSWORD': 'graphite', 'HOST': '', 'PORT': '' } }" >> /etc/graphite.local_settings.py
 ADD scripts/mkadmin.py /usr/bin/mkadmin.py
 RUN chmod 755          /usr/bin/mkadmin.py
+RUN sed s/ENABLE_UDP_LISTENER\ =\ False/ENABLE_UDP_LISTENER\ =\ True/g -i /etc/carbon/carbon.conf
+RUN sed -i '/^#TIME_ZONE/aTIME_ZONE=\'UTC\'' /etc/graphite/local_settings.py
 
 RUN /usr/bin/graphite-manage syncdb --noinput
 RUN /usr/bin/mkadmin.py 
@@ -35,6 +37,7 @@ EXPOSE 80
 
 # Carbon line receiver port
 EXPOSE 2003
+EXPOSE 2003/udp
 
 # Carbon pickle receiver port
 EXPOSE 2004

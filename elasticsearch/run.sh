@@ -10,11 +10,8 @@ if [ ! -d ${key_dir} ]; then
   chmod 600 ${key_dir}/*
 fi 
 
-docker run -p 80:80 \
-           -p 2003:2003 \
-           -p 2003:2003/udp \
-           -p 2004:2004 \
-           -p 7002:7002 \
+docker run -p 9200:9200 \
+           -p 9300:9300 \
            -i \
            -t \
            -d \
