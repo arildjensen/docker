@@ -16,12 +16,17 @@ RUN ln -s /usr/share/graphite-web/apache2-graphite.conf /etc/apache2/sites-enabl
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN echo "CARBON_CACHE_ENABLED=true" > /etc/default/graphite-carbon
-RUN echo "SECRET_KEY = '`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`'" >> /etc/graphite/local_settings.py
-RUN echo "DATABASES = { 'default': { 'NAME': '/var/lib/graphite/graphite.db', 'ENGINE': 'django.db.backends.sqlite3', 'USER': 'admin', 'PASSWORD': 'graphite', 'HOST': '', 'PORT': '' } }" >> /etc/graphite.local_settings.py
+#RUN echo "DATABASES = { 'default': { 'NAME': '/var/lib/graphite/graphite.db', 'ENGINE': 'django.db.backends.sqlite3', 'USER': 'admin', 'PASSWORD': 'graphite', 'HOST': '', 'PORT': '' } }" >> /etc/graphite.local_settings.py
 ADD scripts/mkadmin.py /usr/bin/mkadmin.py
 RUN chmod 755          /usr/bin/mkadmin.py
-RUN sed s/ENABLE_UDP_LISTENER\ =\ False/ENABLE_UDP_LISTENER\ =\ True/g -i /etc/carbon/carbon.conf
-RUN sed -i '/^#TIME_ZONE/aTIME_ZONE=\'UTC\'' /etc/graphite/local_settings.py
+RUN mv /etc/carbon/carbon.conf /etc/carbon/carbon.conf.orig
+ADD carbon.conf /etc/carbon/carbon.conf
+RUN chmod 0644  /etc/carbon/carbon.conf
+RUN mv /etc/graphite/local_settings.py /etc/graphite/local_settings.py.orig
+ADD local_settings.py /etc/graphite/local_settings.py
+RUN chmod 0644        /etc/graphite/local_settings.py
+RUN echo "SECRET_KEY = '`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`'" >> /etc/graphite/local_settings.py
+
 
 RUN /usr/bin/graphite-manage syncdb --noinput
 RUN /usr/bin/mkadmin.py 
